@@ -1,4 +1,4 @@
-# 🛡️ URL Phishing Detector
+#  URL Phishing Detector
 
 A modern, real-time URL phishing detection application built with **Angular 19** and **Python FastAPI**. Analyze URLs for potential phishing threats using advanced heuristic analysis and machine learning-ready feature extraction.
 
