@@ -1,59 +1,126 @@
-# UriPhising
+URL Phishing Detector
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.7.
+A modern, real-time URL phishing detection application built with Angular 19 and Python FastAPI. Analyze URLs for potential phishing threats using advanced heuristic analysis and machine learning-ready feature extraction.
 
-## Development server
+Detection Capabilities (Expected Hopefully)
+- "IP Address Detection" - Flags URLs using raw IP addresses instead of domains
+- "Suspicious TLD Analysis" - Identifies high-risk top-level domains (.tk, .xyz, .click, etc.)
+- "Brand Impersonation" - Detects fake versions of trusted brands (Google, PayPal, Microsoft, etc.)
+- "Typosquatting Detection" - Catches character substitutions (g00gle, paypa1, micros0ft)
+- "Homograph Attack Detection" - Identifies Unicode lookalike characters (Cyrillic а vs Latin a)
+- "URL Obfuscation" - Detects @ symbols, excessive encoding, and redirect parameters
+- "Entropy Analysis" - Flags randomly generated domains using Shannon entropy
+- "URL Shortener Detection" - Identifies hidden destinations behind short links
+- "Deep Scan Mode" - Optional WHOIS, DNS, and SSL certificate verification
 
-To start a local development server, run:
 
-```bash
+Quick Start Guide
+
+Prerequisites
+- Node.js 18+ and npm
+- Python 3.10+ (for backend)
+- Angular CLI 19+
+
+Frontend Setup
+
+# Clone the repository
+git clone https://github.com/yourusername/url-phishing-detector.git
+cd url-phishing-detector
+
+# Install dependencies
+npm install
+
+# Start development server
 ng serve
+
+# Open browser at http://localhost:4200
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Backend Setup (Optional hoping to host it on a server and a work in progress )
 
-## Code scaffolding
+# Navigate to backend directory
+cd backend
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+# Create virtual environment
+python -m venv venv
 
-```bash
-ng generate component component-name
-```
+# Activate virtual environment
+# Windows:
+venv\Scripts\activate
+# Mac/Linux:
+source venv/bin/activate
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+# Install dependencies
+pip install -r requirements.txt
 
-```bash
-ng generate --help
-```
+# Start the server
+uvicorn main:app --reload --port 8000
 
-## Building
 
-To build the project run:
+Project Structure
 
-```bash
-ng build
-```
+url-phishing-detector/
+├── src/
+│   ├── app/
+│   │   ├── components/
+│   │   │   ├── url-input/          # URL input with test URLs
+│   │   │   ├── risk-gauge/         # Animated SVG gauge
+│   │   │   ├── findings-list/      # Categorized findings
+│   │   │   ├── url-metrics/        # Technical metrics
+│   │   │   └── analysis-result/    # Main result container
+│   │   ├── models/
+│   │   │   └── phishing.models.ts  # TypeScript interfaces
+│   │   ├── services/
+│   │   │   └── phishing-detector.service.ts
+│   │   ├── app.component.ts
+│   │   └── app.config.ts
+│   ├── styles.scss                 # Global styles
+│   └── index.html
+├── backend/
+│   ├── main.py                     # FastAPI server
+│   ├── phishing_detector.py        # Detection engine
+│   └── requirements.txt
+└── README.md
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Testing with Mock Data
 
-## Running unit tests
+The UI as of now includes a built-in mock mode for testing without the backend:
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+// In phishing-detector.service.ts
+private readonly useMock = true;  // Set to true for mock data
 
-```bash
-ng test
-```
+// you can add / remove testcases
 
-## Running end-to-end tests
+Test URLs
 
-For end-to-end (e2e) testing, run:
+| URL | Expected Risk |
+|-----|---------------|
+| `https://www.google.com` | ✅ LOW |
+| `http://g00gle-login.tk/verify` | 🔴 CRITICAL |
+| `http://192.168.1.1/admin` | 🟠 HIGH |
+| `http://paypal-secure.xyz/signin` | 🔴 CRITICAL |
+| `http://bit.ly/abc123` | 🟡 MEDIUM |
 
-```bash
-ng e2e
-```
+API Endpoints (Takes time to create!!!)
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/analyze` | Analyze single URL |
+| `POST` | `/api/analyze/batch` | Analyze multiple URLs |
+| `GET` | `/api/features/{url}` | Get ML feature vector |
+| `GET` | `/api/trusted-domains` | List trusted domains |
+| `GET` | `/api/suspicious-tlds` | List suspicious TLDs |
+| `GET` | `/health` | Health check |
 
-## Additional Resources
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
