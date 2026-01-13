@@ -5,7 +5,7 @@ A modern, real-time URL phishing detection application built with **Angular 19**
 
 ##  Features(Hopefully)
 
-###  Detection Capabilities (A work in progress)
+###  Detection Capabilities (work in progress)
 - **IP Address Detection** - Flags URLs using raw IP addresses instead of domains
 - **Suspicious TLD Analysis** - Identifies high-risk top-level domains (.tk, .xyz, .click, etc.)
 - **Brand Impersonation** - Detects fake versions of trusted brands (Google, PayPal, Microsoft, etc.)
