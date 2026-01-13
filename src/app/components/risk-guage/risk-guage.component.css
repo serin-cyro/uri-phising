@@ -1,0 +1,187 @@
+.gauge-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    background: linear-gradient(180deg, transparent 0%, rgba(15, 23, 42, 0.5) 100%);
+}
+
+.gauge {
+    position: relative;
+    width: 220px;
+    height: 130px;
+}
+
+.gauge-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.gauge-bg {
+    opacity: 0.5;
+}
+
+.gauge-fill {
+    transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gauge-label {
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.tick-marks line {
+    opacity: 0.5;
+}
+
+.gauge-center {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.score {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1;
+    font-family: 'Inter', system-ui, sans-serif;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    transition: color 0.5s ease;
+}
+
+.score-label {
+    color: #64748b;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 0.25rem;
+}
+
+.risk-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 0.875rem;
+    margin-top: 1.25rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+
+    &.critical {
+        background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+        color: #fecaca;
+        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+    }
+
+    &.high {
+        background: linear-gradient(135deg, #7c2d12 0%, #9a3412 100%);
+        color: #fed7aa;
+        box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+    }
+
+    &.medium {
+        background: linear-gradient(135deg, #713f12 0%, #854d0e 100%);
+        color: #fef08a;
+        box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
+    }
+
+    &.low {
+        background: linear-gradient(135deg, #14532d 0%, #166534 100%);
+        color: #bbf7d0;
+        box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+    }
+
+    .badge-icon {
+        font-size: 1.125rem;
+    }
+}
+
+
+.risk-message {
+    color: #94a3b8;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+    text-align: center;
+    max-width: 280px;
+    line-height: 1.5;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.5);
+    border-left: 3px solid #475569;
+    transition: all 0.3s ease;
+
+    &.critical {
+        border-left-color: #ef4444;
+        background: rgba(127, 29, 29, 0.2);
+        color: #fca5a5;
+    }
+
+    &.high {
+        border-left-color: #f97316;
+        background: rgba(124, 45, 18, 0.2);
+        color: #fdba74;
+    }
+
+    &.medium {
+        border-left-color: #eab308;
+        background: rgba(113, 63, 18, 0.2);
+        color: #fde047;
+    }
+
+    &.low {
+        border-left-color: #22c55e;
+        background: rgba(20, 83, 45, 0.2);
+        color: #86efac;
+    }
+}
+
+.analysis-time {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    color: #64748b;
+    font-size: 0.75rem;
+
+    .time-icon {
+        font-size: 0.875rem;
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.risk-badge.critical {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+
+@media (max-width: 480px) {
+    .gauge {
+        width: 180px;
+        height: 110px;
+    }
+
+    .score {
+        font-size: 2.5rem;
+    }
+
+    .risk-message {
+        font-size: 0.8125rem;
+        max-width: 240px;
+    }
+}

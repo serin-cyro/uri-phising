@@ -1,0 +1,82 @@
+<!-- src/app/components/url-metrics/url-metrics.component.html -->
+
+<div class="metrics-container" *ngIf="features">
+  <!-- Header -->
+  <div class="metrics-header">
+    <h3>
+      <span class="header-icon">📊</span>
+      URL Metrics
+    </h3>
+    <span class="header-hint">Technical analysis data</span>
+  </div>
+
+  <!-- Metrics Grid -->
+  <div class="metrics-grid">
+    <div 
+      *ngFor="let metric of metricCards"
+      class="metric-card"
+      [ngClass]="metric.status"
+      [title]="metric.description"
+    >
+      <div class="metric-icon">{{ metric.icon }}</div>
+      <div class="metric-value">{{ metric.value }}</div>
+      <div class="metric-label">{{ metric.label }}</div>
+    </div>
+  </div>
+
+  <!-- Flags Section -->
+  <div class="flags-section">
+    <div class="flags-header">
+      <span class="flags-title">Security Flags</span>
+    </div>
+    
+    <div class="flags-grid">
+      <div 
+        *ngFor="let flag of flagItems"
+        class="flag-item"
+        [ngClass]="getFlagStatus(flag)"
+        [class.active]="flag.value"
+      >
+        <span class="flag-indicator">{{ getFlagIcon(flag) }}</span>
+        <span class="flag-icon">{{ flag.icon }}</span>
+        <span class="flag-label">{{ flag.label }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Additional Stats -->
+  <div class="additional-stats">
+    <div class="stat-row">
+      <span class="stat-label">Hostname Length</span>
+      <span class="stat-value">{{ features.hostname_length }} chars</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">TLD Length</span>
+      <span class="stat-value">{{ features.tld_length }} chars</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Dots in URL</span>
+      <span class="stat-value">{{ features.num_dots }}</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Hyphens</span>
+      <span class="stat-value">{{ features.num_hyphens }}</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Slashes</span>
+      <span class="stat-value">{{ features.num_slashes }}</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Digit/Letter Ratio</span>
+      <span class="stat-value">{{ (features.digit_letter_ratio * 100).toFixed(1) }}%</span>
+    </div>
+  </div>
+</div>
+
+<!-- Loading/Empty State -->
+<div class="metrics-container empty" *ngIf="!features">
+  <div class="empty-state">
+    <span class="empty-icon">📊</span>
+    <span class="empty-text">No metrics available</span>
+  </div>
+</div>
