@@ -1,0 +1,67 @@
+<!-- src/app/components/url-input/url-input.component.html -->
+
+<div class="input-container">
+    <!-- Main Input -->
+    <div class="input-wrapper" [class.focused]="urlControl.dirty"
+        [class.error]="urlControl.invalid && urlControl.touched">
+        <span class="input-icon">🔍</span>
+
+        <input type="text" [formControl]="urlControl" placeholder="Enter URL to analyze (e.g., https://example.com)"
+            (keyup.enter)="onAnalyze()" autocomplete="off" spellcheck="false" />
+
+        <button *ngIf="urlControl.value" class="clear-btn" (click)="clearInput()" title="Clear input" type="button">
+            ✕
+        </button>
+
+        <button class="analyze-btn" [disabled]="!urlControl.valid || isLoading" (click)="onAnalyze()" type="button">
+            <span *ngIf="!isLoading">
+                <span class="btn-icon">🛡️</span>
+                <span class="btn-text">Analyze</span>
+            </span>
+            <span *ngIf="isLoading" class="loading-state">
+                <span class="spinner"></span>
+                <span class="btn-text">Scanning...</span>
+            </span>
+        </button>
+    </div>
+
+    <!-- Validation Error -->
+    <div class="error-message" *ngIf="urlControl.invalid && urlControl.touched">
+        <span *ngIf="urlControl.errors?.['required']">URL is required</span>
+        <span *ngIf="urlControl.errors?.['minlength']">URL is too short</span>
+    </div>
+
+    <!-- Options Row -->
+    <div class="options-row">
+        <label class="checkbox-wrapper">
+            <input type="checkbox" [(ngModel)]="deepScan" [disabled]="isLoading" />
+            <span class="checkmark"></span>
+            <span class="checkbox-label">
+                Deep Scan
+                <span class="checkbox-hint">(WHOIS, DNS, SSL verification)</span>
+            </span>
+        </label>
+
+        <button class="test-urls-toggle" (click)="toggleTestUrls()" type="button">
+            {{ showTestUrls ? '▲ Hide' : '▼ Show' }} Test URLs
+        </button>
+    </div>
+
+    <!-- Quick Test URLs -->
+    <div class="test-urls-panel" [class.expanded]="showTestUrls">
+        <div class="test-urls-header">
+            <span class="header-icon">🧪</span>
+            <span>Quick Test URLs</span>
+            <span class="header-hint">Click to analyze</span>
+        </div>
+
+        <div class="test-urls-grid">
+            <button *ngFor="let testUrl of testUrls" class="test-url-btn" [class.safe]="testUrl.label.includes('✅')"
+                [class.warning]="testUrl.label.includes('⚠️')" [class.danger]="testUrl.label.includes('🔴')"
+                (click)="setUrl(testUrl.value)" [title]="testUrl.description" [disabled]="isLoading" type="button">
+                <span class="test-url-label">{{ testUrl.label }}</span>
+                <span class="test-url-desc">{{ testUrl.description }}</span>
+            </button>
+        </div>
+    </div>
+</div>

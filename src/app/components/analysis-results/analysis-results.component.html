@@ -1,0 +1,114 @@
+<!-- src/app/components/analysis-result/analysis-result.component.html -->
+
+<div class="result-container" *ngIf="result" @fadeSlideIn>
+
+    <!-- Error State -->
+    <div class="error-card" *ngIf="hasError" @fadeIn>
+        <div class="error-content">
+            <span class="error-icon">❌</span>
+            <div class="error-details">
+                <span class="error-title">Analysis Failed</span>
+                <span class="error-message">{{ result.error }}</span>
+            </div>
+        </div>
+        <button class="error-dismiss" (click)="onDismiss()">Dismiss</button>
+    </div>
+
+    <!-- Success State -->
+    <ng-container *ngIf="!hasError">
+
+        <!-- URL Info Header -->
+        <div class="url-header" [ngClass]="riskLevelClass">
+            <div class="url-header-top">
+                <div class="url-info">
+                    <span class="url-label">Analyzed URL</span>
+                    <div class="url-value-row">
+                        <span class="url-value" [title]="result.url">{{ formatUrl(result.url) }}</span>
+                        <button class="copy-btn" (click)="copyUrl()" title="Copy URL">📋</button>
+                    </div>
+                </div>
+                <button class="close-btn" (click)="onDismiss()" title="Close">✕</button>
+            </div>
+
+            <div class="url-meta">
+                <span class="meta-item">
+                    <span class="meta-icon">🌐</span>
+                    {{ result.hostname }}
+                </span>
+                <span class="meta-item trusted-badge" *ngIf="result.is_trusted">
+                    <span class="meta-icon">✓</span>
+                    Trusted Domain
+                </span>
+                <span class="meta-item" *ngIf="!result.is_trusted && result.hostname">
+                    <span class="meta-icon">⚠️</span>
+                    Unverified Domain
+                </span>
+                <span class="meta-item">
+                    <span class="meta-icon">⏱️</span>
+                    {{ result.analysis_time_ms | number:'1.0-0' }}ms
+                </span>
+            </div>
+
+            <!-- Quick Stats Bar -->
+            <div class="quick-stats">
+                <div class="stat-item danger" *ngIf="dangerFindingsCount > 0">
+                    <span class="stat-value">{{ dangerFindingsCount }}</span>
+                    <span class="stat-label">Critical Issues</span>
+                </div>
+                <div class="stat-item warning" *ngIf="warningFindingsCount > 0">
+                    <span class="stat-value">{{ warningFindingsCount }}</span>
+                    <span class="stat-label">Warnings</span>
+                </div>
+                <div class="stat-item safe" *ngIf="safeFindingsCount > 0">
+                    <span class="stat-value">{{ safeFindingsCount }}</span>
+                    <span class="stat-label">Positive</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-wrapper">
+
+            <!-- Left Panel: Risk Gauge -->
+            <div class="gauge-panel">
+                <app-risk-guage [score]="result.risk_score" [riskLevel]="result.risk_level"
+                    [analysisTime]="result.analysis_time_ms"></app-risk-guage>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="action-btn secondary" (click)="onReanalyze()">
+                        🔄 Reanalyze
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Panel: Tabbed Content -->
+            <div class="details-panel">
+
+                <!-- Tabs -->
+                <div class="tab-header">
+                    <button class="tab-btn" [class.active]="activeTab === 'findings'"
+                        (click)="setActiveTab('findings')">
+                        <span class="tab-icon">📋</span>
+                        Findings
+                        <span class="tab-badge">{{ result.findings.length }}</span>
+                    </button>
+                    <button class="tab-btn" [class.active]="activeTab === 'metrics'" (click)="setActiveTab('metrics')">
+                        <span class="tab-icon">📊</span>
+                        Metrics
+                    </button>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <app-findings-list *ngIf="activeTab === 'findings'" [findings]="result.findings"
+                        @fadeIn></app-findings-list>
+
+                    <app-url-metrics *ngIf="activeTab === 'metrics'" [features]="result.features"
+                        @fadeIn></app-url-metrics>
+                </div>
+            </div>
+        </div>
+
+    </ng-container>
+</div>

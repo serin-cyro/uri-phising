@@ -1,0 +1,142 @@
+<!-- src/app/components/findings-list/findings-list.component.html -->
+
+<div class="findings-container">
+  <!-- Header -->
+  <div class="findings-header">
+    <h3>
+      <span class="header-icon">📋</span>
+      Analysis Findings
+    </h3>
+    
+    <!-- Summary Pills -->
+    <div class="summary-pills">
+      <span class="pill danger" *ngIf="dangerCount > 0">
+        {{ dangerCount }} Critical/Danger
+      </span>
+      <span class="pill warning" *ngIf="warningCount > 0">
+        {{ warningCount }} Warnings
+      </span>
+      <span class="pill safe" *ngIf="safeCount > 0">
+        {{ safeCount }} Positive
+      </span>
+    </div>
+  </div>
+
+  <!-- Category Tabs -->
+  <div class="category-tabs">
+    <button
+      *ngFor="let cat of categories"
+      class="category-tab"
+      [class.active]="selectedCategory === cat.name"
+      (click)="selectCategory(cat.name)"
+    >
+      <span class="tab-icon">{{ cat.icon }}</span>
+      <span class="tab-name">{{ cat.name }}</span>
+      <span class="tab-count">{{ cat.count }}</span>
+    </button>
+  </div>
+
+  <!-- Sort Controls -->
+  <div class="sort-controls">
+    <span class="sort-label">Sort by:</span>
+    <button 
+      class="sort-btn"
+      [class.active]="sortBy === 'severity'"
+      (click)="toggleSort('severity')"
+    >
+      Severity
+      <span *ngIf="sortBy === 'severity'" class="sort-arrow">
+        {{ sortDirection === 'desc' ? '↓' : '↑' }}
+      </span>
+    </button>
+    <button 
+      class="sort-btn"
+      [class.active]="sortBy === 'impact'"
+      (click)="toggleSort('impact')"
+    >
+      Impact
+      <span *ngIf="sortBy === 'impact'" class="sort-arrow">
+        {{ sortDirection === 'desc' ? '↓' : '↑' }}
+      </span>
+    </button>
+    <button 
+      class="sort-btn"
+      [class.active]="sortBy === 'category'"
+      (click)="toggleSort('category')"
+    >
+      Category
+      <span *ngIf="sortBy === 'category'" class="sort-arrow">
+        {{ sortDirection === 'desc' ? '↓' : '↑' }}
+      </span>
+    </button>
+  </div>
+
+  <!-- Findings List -->
+  <div class="findings-list">
+    <div
+      *ngFor="let finding of filteredFindings; let i = index; trackBy: trackByIndex"
+      class="finding-card"
+      [ngClass]="finding.level"
+      [class.expanded]="isExpanded(i)"
+      (click)="finding.details ? toggleExpand(i) : null"
+      [class.clickable]="finding.details"
+    >
+      <!-- Finding Header Row -->
+      <div class="finding-row">
+        <span class="finding-icon">{{ getLevelIcon(finding.level) }}</span>
+        
+        <div class="finding-content">
+          <span class="finding-category">
+            {{ getCategoryIcon(finding.category) }} {{ finding.category }}
+          </span>
+          <span class="finding-message">{{ finding.message }}</span>
+        </div>
+        
+        <div class="finding-meta">
+          <span class="finding-score" [ngClass]="getScoreClass(finding.score_impact)">
+            {{ finding.score_impact > 0 ? '+' : '' }}{{ finding.score_impact }}
+          </span>
+          <span *ngIf="finding.details" class="expand-icon">
+            {{ isExpanded(i) ? '▲' : '▼' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Expanded Details -->
+      <div class="finding-details" *ngIf="finding.details && isExpanded(i)">
+        <span class="details-icon">💡</span>
+        <span class="details-text">{{ finding.details }}</span>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="filteredFindings.length === 0">
+      <span class="empty-icon">🔍</span>
+      <span class="empty-text">No findings in this category</span>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item">
+      <span class="legend-icon">🔴</span>
+      <span>Critical</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-icon">🟠</span>
+      <span>Danger</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-icon">🟡</span>
+      <span>Warning</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-icon">🔵</span>
+      <span>Info</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-icon">🟢</span>
+      <span>Safe</span>
+    </div>
+  </div>
+</div>
