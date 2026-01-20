@@ -11,9 +11,9 @@ import { AnalysisResult, Finding, URLFeatures } from '../models/phishing.models'
 })
 export class PhishingDetectorService {
   private readonly http = inject(HttpClient);
-  
+
   // Set to true to use mock data, false to use real API
-  private readonly useMock = true;
+  private readonly useMock = false;
   private readonly apiUrl = 'http://localhost:8000/api';
 
   analyzeUrl(url: string, deepScan: boolean = false): Observable<AnalysisResult> {
@@ -34,7 +34,7 @@ export class PhishingDetectorService {
   // ============== MOCK ANALYSIS ENGINE ==============
   private mockAnalyze(url: string, deepScan: boolean): Observable<AnalysisResult> {
     const startTime = performance.now();
-    
+
     // Normalize URL
     let normalizedUrl = url.trim();
     if (!normalizedUrl.match(/^https?:\/\//i)) {
@@ -157,9 +157,9 @@ export class PhishingDetectorService {
   }
 
   private runSecurityChecks(
-    url: string, 
-    normalizedUrl: string, 
-    hostname: string, 
+    url: string,
+    normalizedUrl: string,
+    hostname: string,
     features: URLFeatures,
     deepScan: boolean
   ): { findings: Finding[]; riskScore: number } {
@@ -173,7 +173,7 @@ export class PhishingDetectorService {
 
     // Check IP address
     if (features.has_ip) {
-      addFinding('danger', 'Structure', 'Uses IP address instead of domain name', 30, 
+      addFinding('danger', 'Structure', 'Uses IP address instead of domain name', 30,
         'Legitimate sites rarely use raw IP addresses');
     }
 
@@ -199,7 +199,7 @@ export class PhishingDetectorService {
     // Check brand impersonation
     const brands = ['google', 'microsoft', 'apple', 'amazon', 'facebook', 'paypal', 'netflix', 'bank', 'secure', 'login'];
     const isTrusted = this.isTrustedDomain(hostname);
-    
+
     if (!isTrusted) {
       for (const brand of brands) {
         if (hostname.includes(brand)) {
@@ -217,7 +217,7 @@ export class PhishingDetectorService {
       { pattern: /rn/g, replacement: 'm' },
       { pattern: /vv/g, replacement: 'w' }
     ];
-    
+
     for (const check of typoChecks) {
       if (check.pattern.test(hostname)) {
         const normalized = hostname.replace(check.pattern, check.replacement);
@@ -258,7 +258,7 @@ export class PhishingDetectorService {
     // Check suspicious path keywords
     const sensitiveKeywords = ['login', 'signin', 'password', 'verify', 'secure', 'account', 'update', 'banking'];
     const path = new URL(normalizedUrl).pathname.toLowerCase();
-    
+
     if (!isTrusted) {
       for (const keyword of sensitiveKeywords) {
         if (path.includes(keyword)) {
@@ -296,7 +296,7 @@ export class PhishingDetectorService {
     if (deepScan) {
       addFinding('info', 'DeepScan', 'Deep scan completed', 0,
         'WHOIS, DNS, and SSL checks simulated');
-      
+
       // Simulate finding new domain
       if (Math.random() > 0.7 && !isTrusted) {
         addFinding('warning', 'WHOIS', 'Domain registered recently (simulated)', 15,
