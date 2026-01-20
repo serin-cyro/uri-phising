@@ -9,11 +9,7 @@ from datetime import datetime
 from collections import Counter
 
 # Optional imports for deep scan
-try:
-    import whois
-    WHOIS_AVAILABLE = True
-except ImportError:
-    WHOIS_AVAILABLE = False
+WHOIS_AVAILABLE = False  # Disabled for cloud deployment
 
 try:
     import dns.resolver
