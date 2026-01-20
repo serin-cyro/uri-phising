@@ -174,7 +174,7 @@ async def health_check():
     """Health check endpoint."""
     return {
         "status": "healthy",
-        "version": "2.0.0"
+        "version": "1.0.0"
     }
 
 
@@ -183,7 +183,7 @@ async def root():
     """Root endpoint."""
     return {
         "name": "URL Phishing Detector API",
-        "version": "2.0.0",
+        "version": "1.0.0",
         "docs": "/docs",
         "endpoints": {
             "analyze": "POST /api/analyze",
