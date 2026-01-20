@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
 from phishing_detector import PhishingDetector
+import os
 
 app = FastAPI(
     title="URL Phishing Detector API",
@@ -19,6 +20,7 @@ app.add_middleware(
         "http://localhost:4200",
         "http://127.0.0.1:4200",
         "http://localhost:3000",
+        "https://serin-cyro.github.io"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -190,10 +192,18 @@ async def root():
         }
     }
 
+# for local hosting
 
+# if __name__ == "__main__":
+#     import uvicorn
+#     print("Starting URL Phishing Detector API...")
+#     print("API Docs: http://localhost:8000/docs")
+#     print("Analyze: POST http://localhost:8000/api/analyze")
+#     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+
+# For web hosting
 if __name__ == "__main__":
     import uvicorn
-    print("Starting URL Phishing Detector API...")
-    print("API Docs: http://localhost:8000/docs")
-    print("Analyze: POST http://localhost:8000/api/analyze")
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    port = int(os.environ.get("PORT", 8000))
+    print(f"Starting API on port {port}...")
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
