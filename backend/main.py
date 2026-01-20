@@ -174,7 +174,7 @@ async def health_check():
     """Health check endpoint."""
     return {
         "status": "healthy",
-        "version": "2.0.0"
+        "version": "1.0.0"
     }
 
 
@@ -183,7 +183,7 @@ async def root():
     """Root endpoint."""
     return {
         "name": "URL Phishing Detector API",
-        "version": "2.0.0",
+        "version": "1.0.0",
         "docs": "/docs",
         "endpoints": {
             "analyze": "POST /api/analyze",
@@ -192,18 +192,19 @@ async def root():
         }
     }
 
-# for local hosting
 
-# if __name__ == "__main__":
-#     import uvicorn
-#     print("Starting URL Phishing Detector API...")
-#     print("API Docs: http://localhost:8000/docs")
-#     print("Analyze: POST http://localhost:8000/api/analyze")
-#     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
-
-# For web hosting
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 8000))
-    print(f"Starting API on port {port}...")
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
+    is_production = os.environ.get("RENDER", "false").lower() == "true"
+    
+    if is_production:
+        print(f" Starting URL Phishing Detector API (Production)...")
+        print(f"Running on port {port}")
+        uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
+    else:
+        print("Starting URL Phishing Detector API (Development)...")
+        print(f"API Docs: http://localhost:{port}/docs")
+        print(f"Analyze: POST http://localhost:{port}/api/analyze")
+        print("Hot reload enabled")
+        uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
